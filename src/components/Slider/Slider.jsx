@@ -9,25 +9,25 @@ function Slider({apiKey, baseUrl}) {
     const [upcomingMovies, setUpcomingMovies] = useState([])
     const [index, setIndex] = useState(0)
     const [movieRatings, setMovieRatings] = useState([])
-    const imageBaseUrl = "https://image.tmdb.org/t/p/original"
+    const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
 
-    useEffect (() => {
-        axios.get(`${baseUrl}/movie/upcoming?api_key=${apiKey}`)
-        .then(res=>{
-            console.log(res.data.results)
-            setUpcomingMovies(res.data.results)
-            const rating= res.data.results.map(movie => movie.vote_average/2)
-            setMovieRatings(rating)
-        })
-        .catch(err=> console.log(err))
-    }, [])
+    useEffect (()=>{
+      axios.get(`${baseUrl}/movie/upcoming?api_key=${apiKey}`)
+      .then(res=>{
+          console.log(res)
+          setUpcomingMovies(res.data.results)
+          const rating= res.data.results.map(movie => movie.vote_average/2)
+          setMovieRatings(rating)
+      })
+      .catch(err=>console.log(err))
+  }, [])
 
     const SliderStyle = {
         backgroundImage: `url("${imageBaseUrl}${upcomingMovies[index]?.backdrop_path}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        height: "60vh",
+        height: "80vh",
         postion: 'relative'
         
     }

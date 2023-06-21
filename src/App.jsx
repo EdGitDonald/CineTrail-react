@@ -8,7 +8,8 @@ import Homepage from './pages/Homepage/Homepage'
 
 function App() {
   const apiKey= import.meta.env.VITE_API_KEY;
-  const baseUrl= "https://api.themoviedb.org/3"
+  const baseUrl= import.meta.env.VITE_BASE_URL;
+  
  
 
   return (
