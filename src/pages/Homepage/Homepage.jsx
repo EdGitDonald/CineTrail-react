@@ -1,24 +1,24 @@
-import React, { useState, useEffect} from 'react'
-import './Homepage.css'
+import {useState, useEffect}from 'react'
+import "./Homepage.css"
 import Slider from '../../components/Slider/Slider'
 import axios from 'axios'
 import MovieCard from '../../components/MovieCard/MovieCard'
-import { Link } from 'react-router-dom'
 
 function HomePage({apiKey, baseUrl}) {
   const [popularMovies, setPopularMovies]=useState([])
   const [topRatedMovies, setTopRatedMovies]=useState([])
   const [page, setPage] = useState(1)
+  const pageNumbers=[1,2,3,4,5,6,7,8,9,10];
 
 
 useEffect(()=>{
   axios.get(`${baseUrl}/movie/popular?api_key=${apiKey}&page=${page}`)
   .then(res=>{
-    console.log(res.data.results)
+    // console.log(res.data.results)
     setPopularMovies(res.data.results)
   })
   .catch(err=> console.error(err))
-}, [])
+})
 
 
 useEffect(()=>{
@@ -28,10 +28,13 @@ useEffect(()=>{
     setTopRatedMovies(res.data.results.slice(0,10))
   })
   .catch(err=> console.error(err))
-}, [])
+})
 
 
-
+const handlePage=(page)=>{
+  setPage(page)
+  scrollTo({top: 0, left: 0, behavior: "smooth"})
+}
 
 
   return (
@@ -52,6 +55,25 @@ useEffect(()=>{
 
 
   </div>
+<div className="page-numbers">
+<p> Select Page</p>
+{pageNumbers.map((item) =>(
+  <p className={item === 'page ? "current-page" : "page'}
+  key={item}
+  onClick={() => handlePage(item)}
+  >
+
+    {item}
+  </p>
+))}
+
+</div>
+
+
+
+
+
+
   </div>
 
 

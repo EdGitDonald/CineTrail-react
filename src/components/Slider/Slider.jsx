@@ -1,52 +1,63 @@
-import React, { useEffect, useState } from 'react'
-import './Slider.css'
+import React , {useState, useEffect} from 'react'
 import axios from 'axios'
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md'
-import Ratings from '../Ratings/Rating'
+import "./Slider.css"
 import Genres from '../Genres/Genres'
+import Ratings from '../Ratings/Ratings'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
+import {Link} from 'react-router-dom';
 
 function Slider({apiKey, baseUrl}) {
-    const [upcomingMovies, setUpcomingMovies] = useState([])
-    const [index, setIndex] = useState(0)
-    const [movieRatings, setMovieRatings] = useState([])
-    const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
+    const [upcomingMovies, setUpcomingMovies]=useState([])
+    const [index, setIndex]=useState(0)
+    const [movieRatings, setMovieRatings]=useState([]);
+    const imageBaseUrl=import.meta.env.VITE_IMAGE_BASE_URL
+
 
     useEffect (()=>{
-      axios.get(`${baseUrl}/movie/upcoming?api_key=${apiKey}`)
-      .then(res=>{
-          console.log(res)
-          setUpcomingMovies(res.data.results)
-          const rating= res.data.results.map(movie => movie.vote_average/2)
-          setMovieRatings(rating)
-      })
-      .catch(err=>console.log(err))
-  }, [])
+        axios.get(`${baseUrl}/movie/upcoming?api_key=${apiKey}`)
+        .then(res=>{
+            console.log(res.data.results)
+            setUpcomingMovies(res.data.results)
+            const rating= res.data.results.map(movie => movie.vote_average/2)
+            setMovieRatings(rating)
+        })
+        .catch(err=>console.log(err))
+    }, [])
 
-    const SliderStyle = {
-        backgroundImage: `url("${imageBaseUrl}${upcomingMovies[index]?.backdrop_path}")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        height: "80vh",
-        postion: 'relative'
-        
+
+
+const sliderStyle={
+    backgroundImage: `url("${imageBaseUrl}${upcomingMovies[index]?.backdrop_path}")`,
+    backgroundSize: 'cover',
+    backgroundPosition: "center",
+    backgroundRepeat: 'no-repeat',
+    height: "60vh",
+    position: 'relative'
+}
+
+
+const handleRight=()=>{
+    setIndex(index + 1)
+    if (index === upcomingMovies.length -1){
+        setIndex(0)
     }
 
-    const handleRight = ()=>{
-        setIndex(index+1)
-        if(index === upcomingMovies.length-1)
-           setIndex(0)
+}
+
+const handleLeft=()=>{
+    setIndex(index - 1)
+    if (index===0){
+        setIndex(upcomingMovies.length - 1)
     }
 
-    const handleLeft = ()=>{
-        setIndex(index-1)
-        if(index === 0)
-           setIndex(upcomingMovies.length-1)
-    }
+}
 
+    
   return (
-    <div style={SliderStyle}>
-      <div className="slider-overlay"></div>
+      <div style={sliderStyle}>
+
+
+    <div className="slider-overlay"></div>
     <MdKeyboardArrowLeft  onClick={handleLeft} className="left-arrow" />
     <MdKeyboardArrowRight onClick={handleRight} className="right-arrow" />
     <div className="slider-info">
@@ -55,12 +66,13 @@ function Slider({apiKey, baseUrl}) {
         <Genres moviesGenres={upcomingMovies[index]?.genre_ids} baseUrl={baseUrl} apiKey={apiKey}/>
         <p>Release Date: {upcomingMovies[index]?.release_date}</p>
         <Ratings movieRating={movieRatings[index]}/>
-        </div>
+        <Link  to={`/moviedetails/${upcomingMovies[index]?.id}`} className="see-details">See Details</Link>
 
 
-            
-        </div>
-       
+
+    </div>
+
+    </div>
   )
 }
 
