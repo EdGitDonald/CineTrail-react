@@ -18,7 +18,7 @@ useEffect(()=>{
     setPopularMovies(res.data.results)
   })
   .catch(err=> console.error(err))
-})
+},[])
 
 
 useEffect(()=>{
@@ -28,7 +28,7 @@ useEffect(()=>{
     setTopRatedMovies(res.data.results.slice(0,10))
   })
   .catch(err=> console.error(err))
-})
+},[])
 
 
 const handlePage=(page)=>{
